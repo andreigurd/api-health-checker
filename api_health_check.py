@@ -21,14 +21,19 @@ def get_api_name(url):
     # from urllib.parse import urlparse and parsed = urlparse(url) breaks url into components
     # .netloc is network location
     # .hostname is up to example.com
+    # .replace("x", "y") swaps x with y
     
     parsed_url = urlparse(url)
     domain = parsed_url.hostname
-
+    if domain.startswith("api."):
+        #trimmed_domain = domain.replace("api.", "")
+        domain = domain[4:]
+    
     # .split into two pieces. 0 and -1. [-1] keeps the last piece
 
     api_name = domain.split(".")[0]
-    return api_name.capitalize()
+    #api_name = name + "" + "API"
+    return f'{api_name.capitalize()} API'
 
 #-------------------------------------------------------------------------------------------------------------
 def check_api(url, max_retries=3):
@@ -129,12 +134,12 @@ def main():
         results.append(result_dict)
 
     # print summary
-    header = f'API Health Check - {datetime_now_stamp()}'
+    header = f'\nAPI Health Check - {datetime_now_stamp()}'
     print(header)
     print('='*len(header))
 
     for item in results:
-        print(f'{item["name"]:<16} {item["result"]}')
+        print(f'{item["name"]:<25} {item["result"]}')
         
     print(f"\nSummary: {healthy}/{len(api_list)} API's healthy.")
     
@@ -145,7 +150,7 @@ def main():
         file.write("")
 
         for item in results:
-            file.write(f'{item["name"]:<16} {item["result"]}')
+            file.write(f'{item["name"]:<25} {item["result"]}')
 
         file.write(f"\nSummary: {healthy}/{len(api_list)} APIs healthy")
 
