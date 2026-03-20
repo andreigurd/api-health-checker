@@ -33,7 +33,11 @@ def get_api_name(url):
 
     api_name = domain.split(".")[0]
     #api_name = name + "" + "API"
-    return f'{api_name.capitalize()} API'
+    if "api" in api_name:
+        return f'{api_name.capitalize()}'
+    else:
+        return f'{api_name.capitalize()} API'
+    
 
 #-------------------------------------------------------------------------------------------------------------
 def check_api(url, max_retries=3):
@@ -143,16 +147,15 @@ def main():
         
     print(f"\nSummary: {healthy}/{len(api_list)} API's healthy.")
     
-    # save to log file
+    # save to log file. a is for append
     with open('api_health_log.txt', 'a') as file:
-        file.write(f'{header}\n')
-        file.write('='*len(header))
-        file.write("")
+        file.write(header + "\n")
+        file.write('='*len(header) + "\n" )       
 
         for item in results:
-            file.write(f'{item["name"]:<25} {item["result"]}')
+            file.write(f'{item["name"]:<25} {item["result"]}\n')
 
-        file.write(f"\nSummary: {healthy}/{len(api_list)} APIs healthy")
+        file.write(f"\nSummary: {healthy}/{len(api_list)} APIs healthy\n")
 
 
 #-------------------------------------------------------------------------------------------------------------
